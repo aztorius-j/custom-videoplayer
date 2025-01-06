@@ -1,0 +1,20 @@
+[
+    {
+        "title": "NEFKUS Creative House",
+        "source": "video/nefkus-creative-house.mp4",
+        "poster": "img/nefkus-thumbnail.png",
+        "youtube": "https://www.youtube.com/watch?v=lRWuHWE9k-M"
+    },
+    {
+        "title": "CHATEAU Ruban",
+        "source": "video/chateau-ruban.mp4",
+        "poster": "img/ruban-thumbnail.png",
+        "youtube": "https://www.youtube.com/watch?v=CaP-v3poJe8"
+    },
+    {
+        "title": "NESEDA",
+        "source": "video/neseda.mp4",
+        "poster": "img/neseda-thumbnail.png",
+        "youtube": "https://www.youtube.com/watch?v=vJd3huvXQeY"
+    }
+]

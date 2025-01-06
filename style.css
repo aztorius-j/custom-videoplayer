@@ -1,0 +1,286 @@
+:root {
+    --basic-size: clamp(0.5rem, 1.4vw, 1.2rem);
+    --heading-size: clamp(1.25rem, 7.75vw, 5.75rem);
+    --buttons-size: clamp(1.2rem, 4vw, 2.5rem);
+    --white-color: #ffffff;
+    --hover-color: #e4e4e4;
+    --ivgi-red: #ff0000;
+}
+
+@font-face {
+    font-family: 'NeueHaasDisplayLight';
+    src: url(./fonts/NeueHaasDisplayLight.woff2) format('woff2');
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(25, 25, 25);
+    padding: 0;
+    margin: 0;
+    font-family: 'NeueHaasDisplayLight';
+    color: var(--white-color);
+}
+
+.container {
+    max-width: 1320px;
+    padding: 0;
+    margin: 0 auto;
+}
+
+a, p, h2, button {
+    color: inherit;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+.video-wrapper {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+video {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+.frame {
+    width: 100%;
+    height: 34%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    z-index: 99;
+}
+
+.frame-small {
+    display: none;
+}
+
+.heading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 5%;
+}
+
+h1 {
+    font-weight: normal;
+    font-size: var(--heading-size);
+    line-height: calc(var(--heading-size) - 0.25rem);
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.player {
+    padding: 3% 4%;
+    background: rgba(255, 255, 255, .1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.info p,
+.info h2,
+.additional-info {
+    font-size: var(--basic-size);
+}
+
+.controls {
+    display: flex;
+    gap: 2%;
+}
+
+.controls button {
+    background: transparent;
+    width: var(--buttons-size);
+    height: var(--buttons-size);
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.btn-frame {
+    stroke: var(--white-color);
+    fill: rgba(255, 255, 255, 0);
+    transition: all .3s;
+}
+
+.controls button:hover .btn-frame {
+    fill: var(--hover-color);
+}
+
+.play-icon,
+.pause-icon {
+    stroke: var(--white-color);
+    fill: rgba(255, 255, 255, 0);
+    transition: all .3s;
+}
+
+.controls button:hover .play-icon,
+.controls button:hover .pause-icon {
+    stroke: var(--ivgi-red);
+    fill: var(--ivgi-red);
+}
+
+.volume-icon {
+    stroke: var(--white-color);
+    fill: rgba(255, 255, 255, 0);
+    transition: all .3s;
+}
+
+.controls button:hover .volume-icon {
+    stroke: var(--ivgi-red);
+    fill: var(--ivgi-red);
+}
+
+.volume,
+.volume-mute {
+    stroke: var(--white-color);
+    fill: none;
+    transition: all .3s;
+}
+
+.controls button:hover .volume,
+.controls button:hover .volume-mute {
+    stroke: var(--ivgi-red);
+}
+
+.bottom-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+}
+
+.slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle {
+    display: inline-block;
+    width: 0.8rem;
+    height: 0.8rem;
+    border: 1px solid var(--white-color);
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 1s ease;
+}
+
+.full {
+    background-color: var(--hover-color);
+}
+
+.ytb-link {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.ytb-link a {
+    text-align: center;
+    font-size: var(--basic-size);
+    border: 1px solid var(--white-color);
+    padding: 2% 4%;
+    white-space: nowrap;
+    transition: color .5s, border-color .25s;
+}
+
+.ytb-link a:hover {
+    color: var(--ivgi-red);
+    border-color: var(--ivgi-red);
+}
+
+.poster {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.poster.fade-in {
+    opacity: 1;
+}
+
+.poster.fade-out {
+    opacity: 0;
+}
+
+
+@media screen and (max-width: 640px) {
+    .frame {
+        display: none;
+    }
+
+    .frame-small {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 99;
+    }
+
+    .small-player {
+        width: 100%;
+        height: 90%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .small-player .play-button {
+        background: transparent;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .forward, .backward {
+        background: transparent;
+    }
+
+    .small-player .play-button {
+        width: 34%;
+    }
+
+    .forward, .backward {
+        width: 14%;
+    }
+
+    .bottom-panel-small {
+        display: grid;
+        grid-template-columns: 70% 30%;
+        padding: 2% 2%;
+    }
+
+    .bottom-panel-small a {
+        font-size: clamp(0.6rem, 4vw, 1.25rem);
+    }
+}

@@ -5,8 +5,8 @@ const   video = document.getElementById('video'),
         playButton = document.querySelector('.play-button'),
         volumeOn = Array.from(document.querySelectorAll('.volume')),
         volumeOff = document.querySelector('.volume-mute'),
-        // forward = document.querySelector('.forward'),
-        // backward = document.querySelector('.backward'),
+        forward = document.querySelector('.forward'),
+        backward = document.querySelector('.backward'),
         youtubeLink = document.querySelector('.ytb-link a'),
         posters = Array.from(document.querySelectorAll('.poster')),
         sliderButtons = Array.from(document.querySelectorAll('.circle')),
@@ -143,20 +143,20 @@ function manualChange() {
             }
         });
     });
-    // forward.addEventListener('click', () => {
-    //     paused();
-    //     stopSlider();
-    //     activeIndex = activeIndex < 2 ? activeIndex + 1 : 0;
-    //     changeContent();
-    //     startSlider();
-    // });
-    // backward.addEventListener('click', () => {
-    //     paused();
-    //     stopSlider();
-    //     activeIndex = activeIndex === 0 ? 2 : activeIndex - 1;
-    //     changeContent();
-    //     startSlider();
-    // });
+    forward.addEventListener('click', () => {
+        paused();
+        stopSlider();
+        activeIndex = activeIndex < 2 ? activeIndex + 1 : 0;
+        changeContent();
+        startSlider();
+    });
+    backward.addEventListener('click', () => {
+        paused();
+        stopSlider();
+        activeIndex = activeIndex === 0 ? 2 : activeIndex - 1;
+        changeContent();
+        startSlider();
+    });
 }
 
 // PLAYER ICONS CHANGE

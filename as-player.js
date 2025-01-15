@@ -2,17 +2,16 @@
 const   video = document.getElementById('video'),
         title = document.querySelector('h2'),
         muteButton = document.querySelector('.mute-button'),
-        playButton = document.querySelectorAll('.play-button'),
+        playButton = document.querySelector('.play-button'),
         volumeOn = Array.from(document.querySelectorAll('.volume')),
         volumeOff = document.querySelector('.volume-mute'),
-        smallPlayer = document.querySelector('.small-player'),
-        forward = document.querySelector('.forward'),
-        backward = document.querySelector('.backward'),
-        youtubeLinks = document.querySelectorAll('.ytb-link a'),
+        // forward = document.querySelector('.forward'),
+        // backward = document.querySelector('.backward'),
+        youtubeLink = document.querySelector('.ytb-link a'),
         posters = Array.from(document.querySelectorAll('.poster')),
         sliderButtons = Array.from(document.querySelectorAll('.circle')),
-        playIcons = Array.from(document.querySelectorAll('.play-icon')),
-        pauseIcons = Array.from(document.querySelectorAll('.pause-icon'));
+        playIcon = document.querySelector('.play-icon'),
+        pauseIcon = document.querySelector('.pause-icon');
 
 let     firstMovie, secondMovie, thirdMovie;
 let     activeIndex = 0;
@@ -76,9 +75,8 @@ function changeContent() {
             sliderButtons[activeIndex].classList.add('full');
         });
 
-        youtubeLinks.forEach(link => {
-            link.setAttribute('href', movies[activeIndex].youtube);
-        });
+        youtubeLink.setAttribute('href', movies[activeIndex].youtube);
+        
 }
 
 // START SLIDER
@@ -95,8 +93,7 @@ function stopSlider() {
 }
 
 // PLAY
-playButton.forEach(play => {
-    play.addEventListener('click', () => {
+playButton.addEventListener('click', () => {
         if (video.paused) {
             video.play();
             playing();
@@ -110,15 +107,12 @@ playButton.forEach(play => {
             paused();
         }
     });
-    youtubeLinks.forEach(link => {
-        link.addEventListener('click', event => {
+    youtubeLink.addEventListener('click', event => {
             if (!video.paused && !video.ended) {
                 video.pause();
                 paused();
             }
-        });
     });
-});
 
 video.addEventListener('ended', () => {
     paused();
@@ -149,53 +143,43 @@ function manualChange() {
             }
         });
     });
-    forward.addEventListener('click', () => {
-        paused();
-        stopSlider();
-        activeIndex = activeIndex < 2 ? activeIndex + 1 : 0;
-        changeContent();
-        startSlider();
-    });
-    backward.addEventListener('click', () => {
-        paused();
-        stopSlider();
-        activeIndex = activeIndex === 0 ? 2 : activeIndex - 1;
-        changeContent();
-        startSlider();
-    });
+    // forward.addEventListener('click', () => {
+    //     paused();
+    //     stopSlider();
+    //     activeIndex = activeIndex < 2 ? activeIndex + 1 : 0;
+    //     changeContent();
+    //     startSlider();
+    // });
+    // backward.addEventListener('click', () => {
+    //     paused();
+    //     stopSlider();
+    //     activeIndex = activeIndex === 0 ? 2 : activeIndex - 1;
+    //     changeContent();
+    //     startSlider();
+    // });
 }
 
 // PLAYER ICONS CHANGE
 function playing() {
-    playIcons.forEach(playIcon => {
-        playIcon.style.display = 'none';
-    });
-    pauseIcons.forEach(pauseIcon => {
-        pauseIcon.style.display = 'inline';
-    });
-    smallPlayer.style.opacity = 0.2;
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = 'inline';
 }
 
 function paused() {
-    playIcons.forEach(playIcon => {
-        playIcon.style.display = 'inline';
-    });
-    pauseIcons.forEach(pauseIcon => {
-        pauseIcon.style.display = 'none';
-    });
-    smallPlayer.style.opacity = 1;
+    playIcon.style.display = 'inline';
+    pauseIcon.style.display = 'none';
 }
 
 function muted() {
-    volumeOn.forEach(soundIcon => {
-        soundIcon.style.display = 'none';
+    volumeOn.forEach((volume) => {
+        volume.style.display = 'none';
     });
     volumeOff.style.display = 'inline';
 }
 
 function soundOn() {
-    volumeOn.forEach(soundIcon => {
-        soundIcon.style.display = 'inline';
+    volumeOn.forEach((volume) => {
+        volume.style.display = 'inline';
     });
     volumeOff.style.display = 'none';
 }

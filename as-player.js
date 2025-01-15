@@ -46,7 +46,7 @@ function visualInitialize() {
     soundOn();
     const   movies = [firstMovie, secondMovie, thirdMovie];
     posters.forEach((poster, index) => {
-        poster.style.background = `url(${movies[index].poster}) 0 0 / contain no-repeat`;
+        poster.style.background = `url(${movies[index].poster}) 50% 50% / cover no-repeat`;
     });
 }
 

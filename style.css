@@ -100,7 +100,7 @@ h1 {
 
 .controls {
     display: flex;
-    gap: 1.5%;
+    gap: 1%;
 }
 
 .controls button {
@@ -225,17 +225,59 @@ h1 {
     opacity: 0;
 }
 
+@media screen and (max-width: 1024px) {
+    .frame {
+        height: clamp(9rem, 22vw, 12rem); 
+    }
 
+    .info {
+        display: block;
+    }
 
-@media screen and (max-width: 640px), screen and (orientation: portrait) {
+    .tag-one,
+    .tag-two,
+    .right {
+        display: none;
+    }
+
+    .info h2 {
+        font-size: clamp(1rem, 3.5vw, 2rem);
+    }
+
+    .ytb-link a {
+        border: none;
+    }
+}
+
+@media screen and (orientation: portrait), (max-width:640px) {
     .frame {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 3fr;
-        height: 18rem;
+        height: 15rem;
+    }
+
+    .info {
+        display: block;
     }
 
     h1 {
         display: block;
-        line-height: 3rem;
+        font-size: clamp(2rem, 10vw, 3.5rem);
     }
+
+    .info h2 {
+        font-size: clamp(1rem, 7vw, 2rem);
+    }
+}
+
+@media screen and (max-width: 840px) {
+    .view-on {
+        display: none;
+    } 
+}
+
+@media screen and (orientation: portrait) and (min-width: 584px) {
+    .view-on {
+        display: inline;
+    } 
 }

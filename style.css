@@ -270,7 +270,7 @@ h1 {
     }
 }
 
-@media screen and (max-width: 840px) {
+@media screen and (max-width: 940px) {
     .view-on {
         display: none;
     } 

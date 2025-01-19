@@ -59,11 +59,11 @@ video {
     transition: opacity 1s ease;
 }
 
-.poster.fade-in {
+.fade-in {
     opacity: 1;
 }
 
-.poster.fade-out {
+.fade-out {
     opacity: 0;
 }
 

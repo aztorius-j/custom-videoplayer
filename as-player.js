@@ -201,19 +201,24 @@ function changeCategory() {
                 category = categories[index];
                 scrollBarIndex = index;
                 activeIndex = 0;
-                fetchMovies();
-                if (index === 0) {
-                    headingOne.innerText = "Music";
-                    headingTwo.innerText = "Composition";
-                }
-                else if (index === 1) {
-                    headingOne.innerText = "Sound";
-                    headingTwo.innerText = "Design";
-                }
-                else if (index === 2) {
-                    headingOne.innerText = "Audio";
-                    headingTwo.innerText = "Engineering";
-                }
+                posters.forEach((poster) => {
+                    poster.classList.remove('fade-in');
+                });
+                setTimeout(() => {
+                    fetchMovies();
+                    if (index === 0) {
+                        headingOne.innerText = "Music";
+                        headingTwo.innerText = "Composition";
+                    }
+                    else if (index === 1) {
+                        headingOne.innerText = "Sound";
+                        headingTwo.innerText = "Design";
+                    }
+                    else if (index === 2) {
+                        headingOne.innerText = "Audio";
+                        headingTwo.innerText = "Engineering";
+                    }
+                }, 1000);
             };
         });
     });

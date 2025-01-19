@@ -45,11 +45,11 @@ async function fetchMovies() {
 fetchMovies();
 manualChange();
 changeCategory();
+soundOn();
 
 // VISUAL INITIALIZE
 function visualInitialize() {
     paused();
-    soundOn();
     const   movies = [firstMovie, secondMovie, thirdMovie];
     posters.forEach((poster, index) => {
         poster.style.background = `url(${movies[index].poster}) 50% 50% / cover no-repeat`;
@@ -196,10 +196,10 @@ function changeCategory() {
     scrollBars.forEach((scrollBar, index) => {
         scrollBar.addEventListener('click', () => {
             if (index !== scrollBarIndex) {
+                video.pause();
+                stopSlider();
                 category = categories[index];
                 scrollBarIndex = index;
-                paused();
-                stopSlider();
                 activeIndex = 0;
                 fetchMovies();
                 if (index === 0) {

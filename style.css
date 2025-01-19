@@ -1,7 +1,6 @@
 :root {
-    --basic-size: clamp(1rem, 1.4vw, 1.275rem);
     --heading-size: clamp(3.5rem, 8vw, 6rem);
-    --buttons-size: clamp(3rem, 4vw, 3.5rem);
+    --buttons-size: 3rem;
     --white-color: #ffffff;
     --hover-color: #e4e4e4;
     --ivgi-red: #ff0000;
@@ -23,7 +22,7 @@ body {
     color: var(--white-color);
 }
 
-a, p, h2, button {
+a, p, h1, h2, button {
     color: inherit;
     text-decoration: none;
     padding: 0;
@@ -50,9 +49,27 @@ video {
     z-index: 1;
 }
 
+.poster {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.poster.fade-in {
+    opacity: 1;
+}
+
+.poster.fade-out {
+    opacity: 0;
+}
+
 .frame {
     width: 100%;
-    height: clamp(12.5rem, 17.5vw, 17.5rem);
+    min-height: max(10rem, 25vh);
     position: absolute;
     bottom: 0;
     left: 0;
@@ -72,13 +89,11 @@ h1 {
     font-weight: normal;
     font-size: var(--heading-size);
     line-height: calc(var(--heading-size) - 0.25rem);
-    padding: 0;
-    margin: 0;
     display: grid;
 }
 
 .player {
-    padding: 3% 4%;
+    padding: 1.25rem 4%;
     background: rgba(255, 255, 255, .1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -88,19 +103,43 @@ h1 {
 }
 
 .info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: -0.5rem;
 }
 
-.info p,
-.info h2,
-.additional-info {
-    font-size: var(--basic-size);
+h2 {
+    font-size: 1.375rem;
+}
+
+.slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--white-color);
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 1s ease;
+}
+
+.full {
+    background-color: var(--hover-color);
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
 }
 
 .controls {
     display: flex;
-    gap: 1%;
+    gap: 0.2rem;
 }
 
 .controls button {
@@ -161,92 +200,37 @@ h1 {
     stroke: var(--ivgi-red);
 }
 
-.bottom-panel {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
-}
-
-.slider {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.circle {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    border: 1px solid var(--white-color);
-    border-radius: 50%;
-    background-color: transparent;
-    transition: background-color 1s ease;
-}
-
-.full {
-    background-color: var(--hover-color);
-}
-
-.ytb-link {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
 .ytb-link a {
-    text-align: center;
-    font-size: var(--basic-size);
+    font-size: clamp(1rem, 1.4vw, 1.275rem);
+    height: var(--buttons-size);
     border: 1px solid var(--white-color);
-    padding: 2% 4%;
+    border-radius: var(--buttons-size);
+    padding: 0 1rem;
     white-space: nowrap;
     transition: color .5s, border-color .25s;
+    display: flex;
+    align-items: center;
 }
 
-.ytb-link a:hover {
+.ytb-link a:hover,
+.scrollbar:hover {
     color: var(--ivgi-red);
     border-color: var(--ivgi-red);
 }
 
-.poster {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    opacity: 0;
-    transition: opacity 1s ease;
+.bottom-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2%;
 }
 
-.poster.fade-in {
-    opacity: 1;
-}
-
-.poster.fade-out {
-    opacity: 0;
-}
-
-@media screen and (max-width: 1024px) {
-    .frame {
-        height: clamp(9rem, 22vw, 12rem); 
-    }
-
-    .info {
-        display: block;
-    }
-
-    .tag-one,
-    .tag-two,
-    .right {
-        display: none;
-    }
-
-    .info h2 {
-        font-size: clamp(1rem, 3.5vw, 2rem);
-    }
-
-    .ytb-link a {
-        border: none;
-    }
+.scrollbar {
+    font-size: min(1.5vw, 1rem);
+    text-align: center;
+    border: 1px solid var(--white-color);
+    border-radius: var(--buttons-size);
+    background-color: transparent;
+    transition: color .5s, border-color .25s;
 }
 
 @media screen and (orientation: portrait), (max-width:640px) {
@@ -256,17 +240,9 @@ h1 {
         height: 15rem;
     }
 
-    .info {
-        display: block;
-    }
-
     h1 {
         display: block;
         font-size: clamp(2rem, 10vw, 3.5rem);
-    }
-
-    .info h2 {
-        font-size: clamp(1rem, 7vw, 2rem);
     }
 }
 

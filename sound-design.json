@@ -1,0 +1,20 @@
+[
+    {
+        "title": "CUBE to CUBE",
+        "source": "video/cube-to-cube.mp4",
+        "poster": "img/cube-thumbnail.png",
+        "youtube": "https://www.youtube.com/watch?v=Uq06PzPhILE"
+    },
+    {
+        "title": "DEECK Frens",
+        "source": "video/deeck-frens.mp4",
+        "poster": "img/deeck-frens-thumbnail.png",
+        "youtube": "https://www.youtube.com/watch?v=-KYRjsysa18"
+    },
+    {
+        "title": "LAMITEC",
+        "source": "video/lamitec.mp4",
+        "poster": "img/lamitec-thumbnail.png",
+        "youtube": "https://www.youtube.com/watch?v=BPlisiTajAM"
+    }
+]

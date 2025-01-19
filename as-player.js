@@ -1,5 +1,7 @@
 // VARIABLES, CONSTANTS
 const   video = document.getElementById('video'),
+        headingOne = document.querySelector('.heading-one'),
+        headingTwo = document.querySelector('.heading-two'),
         title = document.querySelector('h2'),
         muteButton = document.querySelector('.mute-button'),
         playButton = document.querySelector('.play-button'),
@@ -11,16 +13,21 @@ const   video = document.getElementById('video'),
         posters = Array.from(document.querySelectorAll('.poster')),
         sliderButtons = Array.from(document.querySelectorAll('.circle')),
         playIcon = document.querySelector('.play-icon'),
-        pauseIcon = document.querySelector('.pause-icon');
+        pauseIcon = document.querySelector('.pause-icon'),
+        categories = ['music-composition.json', 'sound-design.json','audio-engineering.json'],
+        categoryOne = document.getElementById('category-one'),
+        categoryTwo = document.getElementById('category-two'),
+        categoryThree = document.getElementById('category-three');
 
 let     firstMovie, secondMovie, thirdMovie;
 let     activeIndex = 0;
 let     sliderInterval;
+let     category = categories[0];
 
 // FETCH
 async function fetchMovies() {
     try {
-        const response = await fetch('music-composition.json');
+        const response = await fetch(category);
         const data = await response.json();
 
         firstMovie = data[0];
@@ -184,4 +191,43 @@ function soundOn() {
     volumeOff.style.display = 'none';
 }
 
+// CHANGE CATEGORY
+function changeCategory() {
+    categoryOne.addEventListener('click', () => {
+        category = categories[0];
+        paused();
+        stopSlider();
+        fetchMovies();
+        changeContent();
+        startSlider();
+    });
+    categoryTwo.addEventListener('click', () => {
+        category = categories[1];
+        paused();
+        stopSlider();
+        fetchMovies();
+        changeContent();
+        startSlider();
+    });
+    categoryThree.addEventListener('click', () => {
+        category = categories[2];
+        paused();
+        stopSlider();
+        fetchMovies();
+        changeContent();
+        startSlider();
+    });
+    if (category === categories[0]) {
+        headingOne.innerText = "Music";
+        headingTwo.innerText = "Composition";
+    }
+    else if (category === categories[1]) {
+        headingOne.innerText = "Sound";
+        headingTwo.innerText = "Design";
+    }
+    else if (category === categories[2]) {
+        headingOne.innerText = "Audio";
+        headingTwo.innerText = "Engineering";
+    }
+}
 

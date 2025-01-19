@@ -219,7 +219,7 @@ function changeCategory() {
                         headingTwo.innerText = "Engineering";
                     }
                 }, 1000);
-            };
+            }
         });
     });
 }

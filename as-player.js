@@ -196,6 +196,7 @@ function changeCategory() {
     scrollBars.forEach((scrollBar, index) => {
         scrollBar.addEventListener('click', () => {
             if (index !== scrollBarIndex) {
+                playButton.disabled = true;
                 video.pause();
                 stopSlider();
                 category = categories[index];
@@ -218,6 +219,7 @@ function changeCategory() {
                         headingOne.innerText = "Audio";
                         headingTwo.innerText = "Engineering";
                     }
+                    playButton.disabled = false;
                 }, 1000);
             }
         });

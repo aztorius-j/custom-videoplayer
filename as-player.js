@@ -15,16 +15,15 @@ const   video = document.getElementById('video'),
         playIcon = document.querySelector('.play-icon'),
         pauseIcon = document.querySelector('.pause-icon'),
         categories = ['music-composition.json', 'sound-design.json','audio-engineering.json'],
-        categoryOne = document.getElementById('category-one'),
-        categoryTwo = document.getElementById('category-two'),
-        categoryThree = document.getElementById('category-three');
+        scrollBars = Array.from(document.querySelectorAll('.scrollbar'));
 
 let     firstMovie, secondMovie, thirdMovie;
 let     activeIndex = 0;
+let     scrollBarIndex = 0;
 let     sliderInterval;
 let     category = categories[0];
 
-// FETCH
+// FETCH MOVIES
 async function fetchMovies() {
     try {
         const response = await fetch(category);
@@ -45,6 +44,7 @@ async function fetchMovies() {
 
 fetchMovies();
 manualChange();
+changeCategory();
 
 // VISUAL INITIALIZE
 function visualInitialize() {
@@ -193,41 +193,29 @@ function soundOn() {
 
 // CHANGE CATEGORY
 function changeCategory() {
-    categoryOne.addEventListener('click', () => {
-        category = categories[0];
-        paused();
-        stopSlider();
-        fetchMovies();
-        changeContent();
-        startSlider();
+    scrollBars.forEach((scrollBar, index) => {
+        scrollBar.addEventListener('click', () => {
+            if (index !== scrollBarIndex) {
+                category = categories[index];
+                scrollBarIndex = index;
+                paused();
+                stopSlider();
+                activeIndex = 0;
+                fetchMovies();
+                if (index === 0) {
+                    headingOne.innerText = "Music";
+                    headingTwo.innerText = "Composition";
+                }
+                else if (index === 1) {
+                    headingOne.innerText = "Sound";
+                    headingTwo.innerText = "Design";
+                }
+                else if (index === 2) {
+                    headingOne.innerText = "Audio";
+                    headingTwo.innerText = "Engineering";
+                }
+            };
+        });
     });
-    categoryTwo.addEventListener('click', () => {
-        category = categories[1];
-        paused();
-        stopSlider();
-        fetchMovies();
-        changeContent();
-        startSlider();
-    });
-    categoryThree.addEventListener('click', () => {
-        category = categories[2];
-        paused();
-        stopSlider();
-        fetchMovies();
-        changeContent();
-        startSlider();
-    });
-    if (category === categories[0]) {
-        headingOne.innerText = "Music";
-        headingTwo.innerText = "Composition";
-    }
-    else if (category === categories[1]) {
-        headingOne.innerText = "Sound";
-        headingTwo.innerText = "Design";
-    }
-    else if (category === categories[2]) {
-        headingOne.innerText = "Audio";
-        headingTwo.innerText = "Engineering";
-    }
 }
 

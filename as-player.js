@@ -197,6 +197,11 @@ function changeCategory() {
         scrollBar.addEventListener('click', () => {
             if (index !== scrollBarIndex) {
                 playButton.disabled = true;
+                backward.disabled = true;
+                forward.disabled = true;
+                sliderButtons.forEach((sliderButton) => {
+                    sliderButton.disabled = true;
+                });
                 video.pause();
                 stopSlider();
                 category = categories[index];
@@ -220,6 +225,11 @@ function changeCategory() {
                         headingTwo.innerText = "Engineering";
                     }
                     playButton.disabled = false;
+                    backward.disabled = false;
+                    forward.disabled = false;
+                    sliderButtons.forEach((sliderButton) => {
+                        sliderButton.disabled = false;
+                    });
                 }, 1000);
             }
         });

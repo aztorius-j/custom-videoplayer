@@ -14,8 +14,7 @@ const   video = document.getElementById('video'),
         sliderButtons = Array.from(document.querySelectorAll('.circle')),
         playIcon = document.querySelector('.play-icon'),
         pauseIcon = document.querySelector('.pause-icon'),
-        categories = ['music-composition.json', 'sound-design.json','audio-engineering.json'],
-        scrollBars = Array.from(document.querySelectorAll('.scrollbar'));
+        categories = ['music-composition.json', 'sound-design.json','audio-engineering.json'];
 
 let     firstMovie, secondMovie, thirdMovie;
 let     activeIndex = 0;
@@ -44,7 +43,7 @@ async function fetchMovies() {
 
 fetchMovies();
 manualChange();
-changeCategory();
+// changeCategory();
 soundOn();
 
 // VISUAL INITIALIZE
@@ -236,3 +235,64 @@ function changeCategory() {
     });
 }
 
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const progressBar = document.querySelector('progress'),
+          stickyElement = document.querySelector('.sticky-element'),
+          previousSection = stickyElement.parentElement.previousElementSibling;
+
+    let progressStartValue = previousSection.offsetTop + previousSection.offsetHeight,
+        progressMaxValue = window.innerHeight * 5,
+        triggered = false;
+
+    progressBar.max = progressMaxValue;
+
+    // Funkcia na aktualizáciu hodnôt pri resize viewportu
+    const updateOnResize = () => {
+        progressStartValue = previousSection.offsetTop + previousSection.offsetHeight;
+        progressMaxValue = window.innerHeight * 5;
+        progressBar.max = progressMaxValue;
+
+        // Ihneď aktualizuje progress bar po resize
+        updateProgressBar();
+
+        console.log("Viewport resized:");
+        console.log("progressStartValue:", progressStartValue);
+        console.log("progressMaxValue:", progressMaxValue);
+    };
+
+    // Funkcia na aktualizáciu hodnoty progress baru pri scrollovaní
+    const updateProgressBar = () => {
+        let scrollProgress = Math.max(0, window.scrollY - progressStartValue);
+        progressBar.value = Math.min(scrollProgress, progressMaxValue);
+
+        console.log('scrollProgress:', scrollProgress);
+        console.log('progressBar:', progressBar.value);
+    };
+
+    // Správne spracovanie sticky efektu
+    const checkSticky = () => {
+        let rect = stickyElement.getBoundingClientRect();
+
+        if (rect.top === 0 && !triggered) {
+            triggered = true;
+        } else if (rect.top > 50 || rect.bottom < 0) {
+            triggered = false;
+        }
+    };
+
+    // Pridanie event listenerov
+    window.addEventListener("scroll", () => {
+        checkSticky();
+        updateProgressBar();
+    });
+
+    window.addEventListener("resize", updateOnResize); // Volanie update pri zmene veľkosti
+
+    // Inicializácia po načítaní
+    checkSticky();
+    updateProgressBar();
+});

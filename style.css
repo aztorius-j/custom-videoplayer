@@ -226,12 +226,6 @@ h2 {
     position: relative;
 }
 
-.progress-panel {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2%;
-}
-
 progress {
     appearance: none;
     -webkit-appearance: none;
@@ -239,21 +233,23 @@ progress {
     background: none;
     background-color: transparent;
     border: none;
-    border: 1px solid var(--white-color);
     border-radius: var(--buttons-size);
     width: 100%;
     min-width: 0;
     height: min(1.5vw, 1rem);
 }
+
 progress::-webkit-progress-bar {
     background: none;
     background-color: transparent;
 }
+
 progress::-webkit-progress-value {
-    background: white;
+    background: linear-gradient(to right, white, silver);
 }
+
 progress::-moz-progress-bar {
-    background: white;
+    background: linear-gradient(to right, white, silver);
 }
 
 .progress-labels {
@@ -262,7 +258,7 @@ progress::-moz-progress-bar {
     gap: 2%;
     width: 100%;
     position: absolute;
-    bottom: 0;
+    bottom: 1px;
 }
 
 .scrollbar {
@@ -271,6 +267,9 @@ progress::-moz-progress-bar {
     text-align: center;
     letter-spacing: 1px;
     color: var(--white-color);
+
+    border: 1px solid var(--white-color);
+    border-radius: var(--buttons-size);
 }
 
 @media screen and (orientation: portrait), (max-width:640px) {
@@ -311,11 +310,7 @@ progress::-moz-progress-bar {
     background-color: black;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
-}
-
-section:last-of-type {
-    height: 700vh;
+    align-items: center;
 }
 
 h3 {
@@ -324,7 +319,11 @@ h3 {
     font-size: 5rem;
 }
 
-.video-section {
+.sticky-element {
     position: sticky;
     top: 0;
+}
+
+.long-parent {
+    height: 600vh;
 }

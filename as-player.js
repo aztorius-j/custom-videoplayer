@@ -242,7 +242,8 @@ function changeCategory() {
 document.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.querySelector('progress'),
           stickyElement = document.querySelector('.sticky-element'),
-          previousSection = stickyElement.parentElement.previousElementSibling;
+          previousSection = stickyElement.parentElement.previousElementSibling,
+          scrollbars = document.querySelectorAll(".scrollbar"); // Nájdenie scrollbar prvkov
 
     let progressStartValue = previousSection.offsetTop + previousSection.offsetHeight,
         progressMaxValue = window.innerHeight * 5,
@@ -258,10 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Ihneď aktualizuje progress bar po resize
         updateProgressBar();
-
-        console.log("Viewport resized:");
-        console.log("progressStartValue:", progressStartValue);
-        console.log("progressMaxValue:", progressMaxValue);
+        updateScrollbars();
     };
 
     // Funkcia na aktualizáciu hodnoty progress baru pri scrollovaní
@@ -269,8 +267,26 @@ document.addEventListener("DOMContentLoaded", () => {
         let scrollProgress = Math.max(0, window.scrollY - progressStartValue);
         progressBar.value = Math.min(scrollProgress, progressMaxValue);
 
-        console.log('scrollProgress:', scrollProgress);
-        console.log('progressBar:', progressBar.value);
+        updateScrollbars(); // Každý scroll refreshne scrollbar efekt
+    };
+
+    // Funkcia na dynamické vyfarbovanie scrollbarov
+    const updateScrollbars = () => {
+        let progressPercent = (progressBar.value / progressBar.max) * 100;
+
+        scrollbars.forEach((scrollbar, index) => {
+            let start = index * 33.3;  // 0%, 33.3%, 66.6%
+            let end = (index + 1) * 33.3; // 33.3%, 66.6%, 100%
+
+            if (progressPercent >= end) {
+                scrollbar.style.backgroundSize = "100% 100%"; // Ak progress presiahol celý úsek
+            } else if (progressPercent > start) {
+                let fillAmount = ((progressPercent - start) / (end - start)) * 100;
+                scrollbar.style.backgroundSize = `${fillAmount}% 100%`; // Dynamické vyplnenie
+            } else {
+                scrollbar.style.backgroundSize = "0% 100%"; // Ak progress ešte nedosiahol úsek
+            }
+        });
     };
 
     // Správne spracovanie sticky efektu

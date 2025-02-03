@@ -39,6 +39,15 @@ button {
     cursor: pointer;
 }
 
+.long-parent {
+    height: 600vh;
+}
+
+.sticky-element {
+    position: sticky;
+    top: 0;
+}
+
 .video-wrapper {
     height: 100vh;
     position: relative;
@@ -237,19 +246,21 @@ progress {
     width: 100%;
     min-width: 0;
     height: min(1.5vw, 1rem);
+    overflow: hidden;
 }
 
-progress::-webkit-progress-bar {
+@supports (-webkit-hyphens: none) and (text-decoration-skip-ink: auto) {
+    progress {
+        position: relative;
+        top: 1px;
+    }
+}
+
+progress::-webkit-progress-bar,
+progress::-webkit-progress-value,
+progress::-moz-progress-bar {
     background: none;
     background-color: transparent;
-}
-
-progress::-webkit-progress-value {
-    background: linear-gradient(to right, white, silver);
-}
-
-progress::-moz-progress-bar {
-    background: linear-gradient(to right, white, silver);
 }
 
 .progress-labels {
@@ -270,7 +281,14 @@ progress::-moz-progress-bar {
 
     border: 1px solid var(--white-color);
     border-radius: var(--buttons-size);
+
+    background: linear-gradient(to right, white 0%, silver 100%);
+    background-repeat: no-repeat;
 }
+
+.scrollbar:nth-child(1) { background-image: linear-gradient(to right, #ffffff 0%, #eeeeee 100%); }
+.scrollbar:nth-child(2) { background-image: linear-gradient(to right, #eeeeee 0%, #cccccc 100%); }
+.scrollbar:nth-child(3) { background-image: linear-gradient(to right, #cccccc 0%, #e0e0e0 100%); }
 
 @media screen and (orientation: portrait), (max-width:640px) {
     .frame {
@@ -298,8 +316,8 @@ progress::-moz-progress-bar {
 }
 
 @media screen and (orientation: portrait) and (max-width: 584px) {
-    .progress-labels {
-        display: none;
+    .category-name {
+        visibility: hidden;
     }
 }
 
@@ -317,13 +335,4 @@ h3 {
     margin: 0;
     padding: 0;
     font-size: 5rem;
-}
-
-.sticky-element {
-    position: sticky;
-    top: 0;
-}
-
-.long-parent {
-    height: 600vh;
 }

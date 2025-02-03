@@ -247,13 +247,9 @@ progress {
     min-width: 0;
     height: min(1.5vw, 1rem);
     overflow: hidden;
-}
 
-@supports (-webkit-hyphens: none) and (text-decoration-skip-ink: auto) {
-    progress {
-        position: relative;
-        top: 1px;
-    }
+    mask-image: linear-gradient(transparent, transparent);
+    -webkit-mask-image: linear-gradient(transparent, transparent);
 }
 
 progress::-webkit-progress-bar,
@@ -284,6 +280,10 @@ progress::-moz-progress-bar {
 
     background: linear-gradient(to right, white 0%, silver 100%);
     background-repeat: no-repeat;
+}
+
+.category-name {
+    mix-blend-mode: difference;
 }
 
 .scrollbar:nth-child(1) { background-image: linear-gradient(to right, #ffffff 0%, #eeeeee 100%); }

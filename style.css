@@ -25,6 +25,7 @@ body {
     margin: 0;
     font-family: 'NeueHaasDisplayLight';
     color: var(--white-color);
+    background-color: black;
 }
 
 a, p, h1, h2, button {
@@ -41,6 +42,7 @@ button {
 
 .long-parent {
     height: 600vh;
+    background-color: black;
 }
 
 .sticky-element {
@@ -49,8 +51,9 @@ button {
 }
 
 .video-wrapper {
-    height: 100vh;
     position: relative;
+    height: calc(var(--vh, 1vh) * 100);
+    transition: height 0.3s ease-in-out;
 }
 
 video {

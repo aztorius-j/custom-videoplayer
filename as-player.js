@@ -236,18 +236,14 @@ function changeCategory() {
 }
 
 
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.querySelector('progress'),
           stickyElement = document.querySelector('.sticky-element'),
           previousSection = stickyElement.parentElement.previousElementSibling,
-          scrollbars = document.querySelectorAll(".scrollbar"); // Nájdenie scrollbar prvkov
+          scrollbars = document.querySelectorAll(".scrollbar");
 
     let progressStartValue = previousSection.offsetTop + previousSection.offsetHeight,
-        progressMaxValue = window.innerHeight * 5,
-        triggered = false;
+        progressMaxValue = window.innerHeight * 5;
 
     progressBar.max = progressMaxValue;
 
@@ -289,26 +285,32 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // Správne spracovanie sticky efektu
-    const checkSticky = () => {
-        let rect = stickyElement.getBoundingClientRect();
-
-        if (rect.top === 0 && !triggered) {
-            triggered = true;
-        } else if (rect.top > 50 || rect.bottom < 0) {
-            triggered = false;
-        }
-    };
-
     // Pridanie event listenerov
     window.addEventListener("scroll", () => {
-        checkSticky();
         updateProgressBar();
     });
 
     window.addEventListener("resize", updateOnResize); // Volanie update pri zmene veľkosti
 
-    // Inicializácia po načítaní
-    checkSticky();
     updateProgressBar();
 });
+
+
+const updateVH = () => {
+    requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    });
+};
+
+// Funkcia na optimalizáciu resize eventu (debounce)
+let resizeTimer;
+const optimizedResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        updateVH();
+    }, 100); // Počká 200ms po poslednej zmene veľkosti
+};
+
+// Počúvame na `resize` a `load`, ale s optimalizáciou
+window.addEventListener('resize', optimizedResize);
+window.addEventListener('load', updateVH);

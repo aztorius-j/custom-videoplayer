@@ -18,20 +18,20 @@ const   video = document.getElementById('video'),
 
 let     firstMovie, secondMovie, thirdMovie;
 let     activeIndex = 0;
-let     scrollBarIndex = 0;
+let     currentCategoryIndex = 0;
 let     sliderInterval;
-let     category = categories[0];
 
 // FETCH MOVIES
 async function fetchMovies() {
     try {
-        const response = await fetch(category);
+        const response = await fetch(categories[currentCategoryIndex]);
         const data = await response.json();
 
         firstMovie = data[0];
         secondMovie = data[1];
         thirdMovie = data[2];
 
+        stopSlider();
         visualInitialize();
         changeContent();
         startSlider();
@@ -41,9 +41,9 @@ async function fetchMovies() {
     }
 }
 
-fetchMovies();
+changeCategory();
 manualChange();
-// changeCategory();
+paused();
 soundOn();
 
 // VISUAL INITIALIZE
@@ -191,48 +191,37 @@ function soundOn() {
 }
 
 // CHANGE CATEGORY
-function changeCategory() {
-    scrollBars.forEach((scrollBar, index) => {
-        scrollBar.addEventListener('click', () => {
-            if (index !== scrollBarIndex) {
-                playButton.disabled = true;
-                backward.disabled = true;
-                forward.disabled = true;
-                sliderButtons.forEach((sliderButton) => {
-                    sliderButton.disabled = true;
-                });
-                video.pause();
-                stopSlider();
-                category = categories[index];
-                scrollBarIndex = index;
-                activeIndex = 0;
-                posters.forEach((poster) => {
-                    poster.classList.remove('fade-in');
-                });
-                setTimeout(() => {
-                    fetchMovies();
-                    if (index === 0) {
-                        headingOne.innerText = "Music";
-                        headingTwo.innerText = "Composition";
-                    }
-                    else if (index === 1) {
-                        headingOne.innerText = "Sound";
-                        headingTwo.innerText = "Design";
-                    }
-                    else if (index === 2) {
-                        headingOne.innerText = "Audio";
-                        headingTwo.innerText = "Engineering";
-                    }
-                    playButton.disabled = false;
-                    backward.disabled = false;
-                    forward.disabled = false;
-                    sliderButtons.forEach((sliderButton) => {
-                        sliderButton.disabled = false;
-                    });
-                }, 1000);
-            }
-        });
-    });
+function changeCategory(newCategoryIndex) {
+    if (newCategoryIndex === currentCategoryIndex) return;
+
+    currentCategoryIndex = newCategoryIndex;
+
+    video.pause(); 
+    playButton.disabled = true;
+    backward.disabled = true;
+    forward.disabled = true;
+    sliderButtons.forEach(sliderButton => sliderButton.disabled = true);
+    posters.forEach(poster => poster.classList.remove('fade-in'));
+
+    if (newCategoryIndex === 0) {
+        headingOne.innerText = "Music";
+        headingTwo.innerText = "Composition";
+    } else if (newCategoryIndex === 1) {
+        headingOne.innerText = "Sound";
+        headingTwo.innerText = "Design";
+    } else if (newCategoryIndex === 2) {
+        headingOne.innerText = "Audio";
+        headingTwo.innerText = "Engineering";
+    }
+
+    setTimeout(() => {
+        activeIndex = 0;
+        fetchMovies();
+        playButton.disabled = false;
+        backward.disabled = false;
+        forward.disabled = false;
+        sliderButtons.forEach(sliderButton => sliderButton.disabled = false);
+    }, 1000);
 }
 
 
@@ -247,26 +236,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     progressBar.max = progressMaxValue;
 
-    // Funkcia na aktualizáciu hodnôt pri resize viewportu
     const updateOnResize = () => {
         progressStartValue = previousSection.offsetTop + previousSection.offsetHeight;
         progressMaxValue = window.innerHeight * 5;
         progressBar.max = progressMaxValue;
 
-        // Ihneď aktualizuje progress bar po resize
         updateProgressBar();
         updateScrollbars();
     };
 
-    // Funkcia na aktualizáciu hodnoty progress baru pri scrollovaní
     const updateProgressBar = () => {
-        let scrollProgress = Math.max(0, window.scrollY - progressStartValue);
+        let scrollProgress = Math.max(0, window.scrollY - progressStartValue),
+            progressPercent = Math.floor((scrollProgress / progressMaxValue) * 100);
+
         progressBar.value = Math.min(scrollProgress, progressMaxValue);
 
-        updateScrollbars(); // Každý scroll refreshne scrollbar efekt
+        let newCategoryIndex = 0;
+
+        if (progressPercent > 33 && progressPercent <= 66) {
+            newCategoryIndex = 1;
+        } else if (progressPercent > 66) {
+            newCategoryIndex = 2;
+        }
+
+        updateScrollbars();
+        changeCategory(newCategoryIndex);
     };
 
-    // Funkcia na dynamické vyfarbovanie scrollbarov
     const updateScrollbars = () => {
         let progressPercent = (progressBar.value / progressBar.max) * 100;
 
@@ -285,16 +281,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // Pridanie event listenerov
     window.addEventListener("scroll", () => {
         updateProgressBar();
     });
 
-    window.addEventListener("resize", updateOnResize); // Volanie update pri zmene veľkosti
+    window.addEventListener("resize", updateOnResize);
 
     updateProgressBar();
 });
-
 
 const updateVH = () => {
     requestAnimationFrame(() => {
@@ -308,9 +302,8 @@ const optimizedResize = () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
         updateVH();
-    }, 100); // Počká 200ms po poslednej zmene veľkosti
+    }, 100); // Počká 100ms po poslednej zmene veľkosti
 };
 
-// Počúvame na `resize` a `load`, ale s optimalizáciou
 window.addEventListener('resize', optimizedResize);
 window.addEventListener('load', updateVH);

@@ -23,20 +23,17 @@ let     firstMovie, secondMovie, thirdMovie,
         videoData = [];
 
 // FETCH MOVIES
+let videoDataPromise = fetchMovies();
+
 async function fetchMovies() {
     try {
         const response = await fetch('portfolio.json');
         const data = await response.json();
-        return data;
+        videoData = data;
     } catch (error) {
         console.error('Error loading JSON:', error);
-        return [];
     }
 }
-
-fetchMovies().then(data => {
-    videoData = data;
-});
 
 // PROGRESS BAR UPDATE
 document.addEventListener('DOMContentLoaded', () => {
@@ -127,38 +124,29 @@ paused();
 soundOn();
 
 // CHANGE CATEGORY
-function changeCategory(newCategoryIndex) {
+async function changeCategory(newCategoryIndex) {
     if (newCategoryIndex === currentCategoryIndex) return;
+
+    await videoDataPromise;
 
     currentCategoryIndex = newCategoryIndex;
 
     video.pause(); 
-    playButton.disabled = true;
-    backward.disabled = true;
-    forward.disabled = true;
-    sliderButtons.forEach(sliderButton => sliderButton.disabled = true);
-    posters.forEach(poster => poster.classList.remove('fade-in'));
 
-    setTimeout(() => {
-        activeIndex = 0;
+    activeIndex = 0;
 
-        firstMovie = videoData[currentCategoryIndex].videos[0];
-        secondMovie = videoData[currentCategoryIndex].videos[1];
-        thirdMovie = videoData[currentCategoryIndex].videos[2];
+    firstMovie = videoData[currentCategoryIndex].videos[0];
+    secondMovie = videoData[currentCategoryIndex].videos[1];
+    thirdMovie = videoData[currentCategoryIndex].videos[2];
 
-        headingOne.innerText = videoData[currentCategoryIndex].category.split(" ")[0];
-        headingTwo.innerText = videoData[currentCategoryIndex].category.split(" ")[1] || "";
+    headingOne.innerText = videoData[currentCategoryIndex].category.split(" ")[0];
+    headingTwo.innerText = videoData[currentCategoryIndex].category.split(" ")[1] || "";
 
-        stopSlider();
-        visualInitialize(newCategoryIndex);
-        changeContent();
-        startSlider();
+    stopSlider();
+    visualInitialize(newCategoryIndex);
+    changeContent();
+    startSlider();
 
-        playButton.disabled = false;
-        backward.disabled = false;
-        forward.disabled = false;
-        sliderButtons.forEach(sliderButton => sliderButton.disabled = false);
-    }, 1000);
 }
 
 // VISUAL INITIALIZE

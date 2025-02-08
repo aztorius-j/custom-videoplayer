@@ -17,33 +17,27 @@ const   video = document.getElementById('video'),
 
 let     firstMovie, secondMovie, thirdMovie,
         activeIndex = 0,
-        currentCategoryIndex = 0,
-        sliderInterval;
+        currentCategoryIndex,
+        sliderInterval,
+        videoData = [];
 
 // FETCH MOVIES
 async function fetchMovies() {
     try {
         const response = await fetch('portfolio.json');
         const data = await response.json();
-
-        firstMovie = data[currentCategoryIndex].videos[0];
-        secondMovie = data[currentCategoryIndex].videos[1];
-        thirdMovie = data[currentCategoryIndex].videos[2];
-
-        headingOne.innerText = data[currentCategoryIndex].category.split(" ")[0];
-        headingTwo.innerText = data[currentCategoryIndex].category.split(" ")[1];
-
-        stopSlider();
-        visualInitialize();
-        changeContent();
-        startSlider();
-    }
-    catch (error) {
+        return data;
+    } catch (error) {
         console.error('Error loading JSON:', error);
+        return [];
     }
 }
 
-changeCategory();
+fetchMovies().then(data => {
+    videoData = data;
+    changeCategory(0);
+});
+
 manualChange();
 paused();
 soundOn();
@@ -207,7 +201,19 @@ function changeCategory(newCategoryIndex) {
 
     setTimeout(() => {
         activeIndex = 0;
-        fetchMovies();
+
+        firstMovie = videoData[currentCategoryIndex].videos[0];
+        secondMovie = videoData[currentCategoryIndex].videos[1];
+        thirdMovie = videoData[currentCategoryIndex].videos[2];
+
+        headingOne.innerText = videoData[currentCategoryIndex].category.split(" ")[0];
+        headingTwo.innerText = videoData[currentCategoryIndex].category.split(" ")[1] || "";
+
+        stopSlider();
+        visualInitialize();
+        changeContent();
+        startSlider();
+
         playButton.disabled = false;
         backward.disabled = false;
         forward.disabled = false;
@@ -281,12 +287,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateProgressBar();
 });
 
-const updateVH = () => {
-    requestAnimationFrame(() => {
-        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-    });
-};
-
 // Funkcia na optimalizáciu resize eventu (debounce)
 let resizeTimer;
 const optimizedResize = () => {
@@ -294,6 +294,12 @@ const optimizedResize = () => {
     resizeTimer = setTimeout(() => {
         updateVH();
     }, 100); // Počká 100ms po poslednej zmene veľkosti
+};
+
+const updateVH = () => {
+    requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    });
 };
 
 window.addEventListener('resize', optimizedResize);

@@ -13,23 +13,25 @@ const   video = document.getElementById('video'),
         posters = Array.from(document.querySelectorAll('.poster')),
         sliderButtons = Array.from(document.querySelectorAll('.circle')),
         playIcon = document.querySelector('.play-icon'),
-        pauseIcon = document.querySelector('.pause-icon'),
-        categories = ['music-composition.json', 'sound-design.json','audio-engineering.json'];
+        pauseIcon = document.querySelector('.pause-icon');
 
-let     firstMovie, secondMovie, thirdMovie;
-let     activeIndex = 0;
-let     currentCategoryIndex = 0;
-let     sliderInterval;
+let     firstMovie, secondMovie, thirdMovie,
+        activeIndex = 0,
+        currentCategoryIndex = 0,
+        sliderInterval;
 
 // FETCH MOVIES
 async function fetchMovies() {
     try {
-        const response = await fetch(categories[currentCategoryIndex]);
+        const response = await fetch('portfolio.json');
         const data = await response.json();
 
-        firstMovie = data[0];
-        secondMovie = data[1];
-        thirdMovie = data[2];
+        firstMovie = data[currentCategoryIndex].videos[0];
+        secondMovie = data[currentCategoryIndex].videos[1];
+        thirdMovie = data[currentCategoryIndex].videos[2];
+
+        headingOne.innerText = data[currentCategoryIndex].category.split(" ")[0];
+        headingTwo.innerText = data[currentCategoryIndex].category.split(" ")[1];
 
         stopSlider();
         visualInitialize();
@@ -203,17 +205,6 @@ function changeCategory(newCategoryIndex) {
     sliderButtons.forEach(sliderButton => sliderButton.disabled = true);
     posters.forEach(poster => poster.classList.remove('fade-in'));
 
-    if (newCategoryIndex === 0) {
-        headingOne.innerText = "Music";
-        headingTwo.innerText = "Composition";
-    } else if (newCategoryIndex === 1) {
-        headingOne.innerText = "Sound";
-        headingTwo.innerText = "Design";
-    } else if (newCategoryIndex === 2) {
-        headingOne.innerText = "Audio";
-        headingTwo.innerText = "Engineering";
-    }
-
     setTimeout(() => {
         activeIndex = 0;
         fetchMovies();
@@ -267,16 +258,16 @@ document.addEventListener("DOMContentLoaded", () => {
         let progressPercent = (progressBar.value / progressBar.max) * 100;
 
         scrollbars.forEach((scrollbar, index) => {
-            let start = index * 33.3;  // 0%, 33.3%, 66.6%
-            let end = (index + 1) * 33.3; // 33.3%, 66.6%, 100%
+            let start = index * 33.3;
+            let end = (index + 1) * 33.3;
 
             if (progressPercent >= end) {
-                scrollbar.style.backgroundSize = "100% 100%"; // Ak progress presiahol celý úsek
+                scrollbar.style.backgroundSize = "100% 100%";
             } else if (progressPercent > start) {
                 let fillAmount = ((progressPercent - start) / (end - start)) * 100;
-                scrollbar.style.backgroundSize = `${fillAmount}% 100%`; // Dynamické vyplnenie
+                scrollbar.style.backgroundSize = `${fillAmount}% 100%`;
             } else {
-                scrollbar.style.backgroundSize = "0% 100%"; // Ak progress ešte nedosiahol úsek
+                scrollbar.style.backgroundSize = "0% 100%";
             }
         });
     };

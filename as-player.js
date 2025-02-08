@@ -162,14 +162,12 @@ function changeContent() {
     const   movies = [firstMovie, secondMovie, thirdMovie];
     
         posters.forEach((poster, index) => {
-            poster.classList.remove('fade-in', 'fade-out');
-
             if (index === activeIndex) {
                 poster.style.zIndex = 2;
-                poster.classList.add('fade-in');
+                poster.style.opacity = 1;
             } else {
                 poster.style.zIndex = 1;
-                poster.classList.add('fade-out');
+                poster.style.opacity = 0;
             }
         });
 

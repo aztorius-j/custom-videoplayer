@@ -77,14 +77,6 @@ video {
     transition: opacity 1s ease;
 }
 
-.fade-in {
-    opacity: 1;
-}
-
-.fade-out {
-    opacity: 0;
-}
-
 .category-animation {
     animation: category-keyframe 1000ms cubic-bezier(0.76, 0, 0.24, 1);
 }

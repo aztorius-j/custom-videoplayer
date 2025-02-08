@@ -150,7 +150,7 @@ function changeCategory(newCategoryIndex) {
         headingTwo.innerText = videoData[currentCategoryIndex].category.split(" ")[1] || "";
 
         stopSlider();
-        visualInitialize();
+        visualInitialize(newCategoryIndex);
         changeContent();
         startSlider();
 
@@ -162,11 +162,10 @@ function changeCategory(newCategoryIndex) {
 }
 
 // VISUAL INITIALIZE
-function visualInitialize() {
+function visualInitialize(newCategoryIndex) {
     paused();
-    const   movies = [firstMovie, secondMovie, thirdMovie];
     posters.forEach((poster, index) => {
-        poster.style.background = `url(${movies[index].poster}) 50% 50% / cover no-repeat`;
+        poster.style.background = `url(${videoData[newCategoryIndex].videos[index].poster}) 50% 50% / cover no-repeat`;
     });
 }
 

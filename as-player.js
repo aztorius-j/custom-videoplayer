@@ -119,6 +119,7 @@ const updateVH = () => {
 // EVENT LISTENERS AND FUNCTION CALLS
 window.addEventListener('resize', optimizedResize);
 window.addEventListener('load', updateVH);
+visualInitialize();
 manualChange();
 paused();
 soundOn();
@@ -130,10 +131,8 @@ async function changeCategory(newCategoryIndex) {
     await videoDataPromise;
 
     currentCategoryIndex = newCategoryIndex;
-
-    video.pause(); 
-
-    activeIndex = 0;
+    video.pause();
+    activeIndex = 0; 
 
     firstMovie = videoData[currentCategoryIndex].videos[0];
     secondMovie = videoData[currentCategoryIndex].videos[1];
@@ -143,45 +142,42 @@ async function changeCategory(newCategoryIndex) {
     headingTwo.innerText = videoData[currentCategoryIndex].category.split(" ")[1] || "";
 
     stopSlider();
-    visualInitialize(newCategoryIndex);
-    changeContent();
+    changeContent(currentCategoryIndex);
     startSlider();
-
 }
 
 // VISUAL INITIALIZE
-function visualInitialize(newCategoryIndex) {
-    paused();
+async function visualInitialize() {
+    await videoDataPromise;
+    const allVideos = videoData.flatMap(category => category.videos);
     posters.forEach((poster, index) => {
-        poster.style.background = `url(${videoData[newCategoryIndex].videos[index].poster}) 50% 50% / cover no-repeat`;
+            poster.style.background = `url(${allVideos[index].poster}) 50% 50% / cover no-repeat`;
     });
 }
 
 // CHANGE CONTENT
-function changeContent() {
-    const   movies = [firstMovie, secondMovie, thirdMovie];
+function changeContent(currentCategoryIndex) {
+    const movies = [firstMovie, secondMovie, thirdMovie];
+
+    posters.forEach((poster, index) => {
+        const categoryStartIndex = currentCategoryIndex * 3;
+        const localIndex = index - categoryStartIndex;
     
-        posters.forEach((poster, index) => {
-            if (index === activeIndex) {
-                poster.style.zIndex = 2;
-                poster.style.opacity = 1;
-            } else {
-                poster.style.zIndex = 1;
-                poster.style.opacity = 0;
-            }
-        });
+        const isActive = index >= categoryStartIndex && index < categoryStartIndex + 3 && localIndex === activeIndex;
+    
+        poster.style.opacity = isActive ? 1 : (index >= categoryStartIndex && index < categoryStartIndex + 3 ? 0 : 1);
+        poster.style.zIndex = isActive ? 2 : 1;
+    });
 
-        video.pause();
-        video.src = movies[activeIndex].source;
-        video.load();
-        title.textContent = movies[activeIndex].title;
+    video.pause();
+    video.src = movies[activeIndex].source;
+    video.load();
+    title.textContent = movies[activeIndex].title;
 
-        sliderButtons.forEach(slide => {
-            slide.classList.remove('full');
-            sliderButtons[activeIndex].classList.add('full');
-        });
+    sliderButtons.forEach(slide => slide.classList.remove('full'));
+    sliderButtons[activeIndex].classList.add('full');
 
-        youtubeLink.setAttribute('href', movies[activeIndex].youtube); 
+    youtubeLink.setAttribute('href', movies[activeIndex].youtube);
 }
 
 // MANUAL CHANGE
@@ -192,7 +188,7 @@ function manualChange() {
                 paused();
                 stopSlider();
                 activeIndex = index;
-                changeContent();
+                changeContent(currentCategoryIndex);
                 startSlider();
             }
         });
@@ -201,14 +197,14 @@ function manualChange() {
         paused();
         stopSlider();
         activeIndex = activeIndex < 2 ? activeIndex + 1 : 0;
-        changeContent();
+        changeContent(currentCategoryIndex);
         startSlider();
     });
     backward.addEventListener('click', () => {
         paused();
         stopSlider();
         activeIndex = activeIndex === 0 ? 2 : activeIndex - 1;
-        changeContent();
+        changeContent(currentCategoryIndex);
         startSlider();
     });
 }
@@ -217,7 +213,7 @@ function manualChange() {
 function startSlider() {
     sliderInterval = setInterval(() => {
         activeIndex = (activeIndex + 1) % 3;
-        changeContent();
+        changeContent(currentCategoryIndex);
     }, 5000);
 }
 

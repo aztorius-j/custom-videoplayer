@@ -35,7 +35,6 @@ async function fetchMovies() {
 
 fetchMovies().then(data => {
     videoData = data;
-    changeCategory(0);
 });
 
 manualChange();

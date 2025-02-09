@@ -17,7 +17,7 @@ const   video = document.getElementById('video'),
 
 let     firstMovie, secondMovie, thirdMovie,
         activeIndex = 0,
-        currentCategoryIndex,
+        previousCategoryIndex = -1,
         sliderInterval,
         resizeTimer,
         videoData = [];
@@ -124,25 +124,87 @@ manualChange();
 paused();
 soundOn();
 
+const categoryWrappers = Array.from(document.querySelectorAll('.poster-category'));
 // CHANGE CATEGORY
 async function changeCategory(newCategoryIndex) {
-    if (newCategoryIndex === currentCategoryIndex) return;
+    if (newCategoryIndex === previousCategoryIndex) return;
 
     await videoDataPromise;
 
-    currentCategoryIndex = newCategoryIndex;
+    console.log('newCategoryIndex:' + newCategoryIndex);
+    console.log('previousCategoryIndex:' + previousCategoryIndex);
+
+    const firstWrapper = categoryWrappers[0];
+    const secondWrapper = categoryWrappers[1];
+    const thirdWrapper = categoryWrappers[2];
+
+    function moveWrapper(wrapper, offsetY) {
+        if (!wrapper) return; // Ochrana pred chybou, ak wrapper neexistuje
+    
+        const currentTransform = getComputedStyle(wrapper).transform;
+    
+        // Ak už existuje transformácia, získame jej aktuálnu hodnotu
+        let currentY = 0;
+        if (currentTransform !== 'none') {
+            const matrix = new DOMMatrix(currentTransform);
+            currentY = matrix.m42; // Y-ová súradnica transformácie
+        }
+    
+        // Prepočítame offset v pixeloch (napr. 101vh → px)
+        const offsetPx = window.innerHeight * (offsetY / 100);
+    
+        // Nastavíme novú hodnotu transform
+        const newY = currentY + offsetPx;
+        wrapper.style.transform = `translateY(${newY}px)`;
+    
+        return newY; // Vracia novú hodnotu translateY pre prípad, že by si ju chcel použiť
+    }
+
+    if (newCategoryIndex === 0) {
+        if (newCategoryIndex > previousCategoryIndex) {
+            // Pohyb dopredu (0 → 1)
+
+        } else {
+            // Pohyb dozadu (2 → 1)
+            moveWrapper(secondWrapper, 100);
+            moveWrapper(firstWrapper, 100);
+        }
+    } 
+    else if (newCategoryIndex === 1) {
+        if (newCategoryIndex > previousCategoryIndex) {
+            // Pohyb dopredu (0 → 1)
+            moveWrapper(firstWrapper, -100);
+            moveWrapper(secondWrapper, -100);
+        } else {
+            // Pohyb dozadu (2 → 1)
+            moveWrapper(thirdWrapper, 100);
+            moveWrapper(secondWrapper, 100);
+        }
+    } 
+    else if (newCategoryIndex === 2) {
+        if (newCategoryIndex > previousCategoryIndex) {
+            // Pohyb dopredu (1 → 2)
+            moveWrapper(secondWrapper, -100);
+            moveWrapper(thirdWrapper, -100);
+        } else {
+            // Pohyb dozadu (2 → 1)
+
+        }
+    }
+
+    previousCategoryIndex = newCategoryIndex;
     video.pause();
     activeIndex = 0; 
 
-    firstMovie = videoData[currentCategoryIndex].videos[0];
-    secondMovie = videoData[currentCategoryIndex].videos[1];
-    thirdMovie = videoData[currentCategoryIndex].videos[2];
+    firstMovie = videoData[previousCategoryIndex].videos[0];
+    secondMovie = videoData[previousCategoryIndex].videos[1];
+    thirdMovie = videoData[previousCategoryIndex].videos[2];
 
-    headingOne.innerText = videoData[currentCategoryIndex].category.split(" ")[0];
-    headingTwo.innerText = videoData[currentCategoryIndex].category.split(" ")[1] || "";
+    headingOne.innerText = videoData[previousCategoryIndex].category.split(" ")[0];
+    headingTwo.innerText = videoData[previousCategoryIndex].category.split(" ")[1] || "";
 
     stopSlider();
-    changeContent(currentCategoryIndex);
+    changeContent(previousCategoryIndex);
     startSlider();
 }
 
@@ -156,19 +218,25 @@ async function visualInitialize() {
 }
 
 // CHANGE CONTENT
-function changeContent(currentCategoryIndex) {
+function changeContent(previousCategoryIndex) {
     const movies = [firstMovie, secondMovie, thirdMovie];
 
     posters.forEach((poster, index) => {
-        const categoryStartIndex = currentCategoryIndex * 3;
+        const categoryStartIndex = previousCategoryIndex * 3;
         const localIndex = index - categoryStartIndex;
-    
+        const isInCurrentCategory = index >= categoryStartIndex && index < categoryStartIndex + 3;
         const isActive = index >= categoryStartIndex && index < categoryStartIndex + 3 && localIndex === activeIndex;
-    
-        poster.style.opacity = isActive ? 1 : (index >= categoryStartIndex && index < categoryStartIndex + 3 ? 0 : 1);
-        poster.style.zIndex = isActive ? 2 : 1;
+
+        if (isInCurrentCategory) {
+            poster.style.opacity = isActive ? 1 : 0;
+            poster.style.zIndex = isActive ? 2 : 1;
+        } else {
+            poster.style.opacity = isActive ? 1 : (isInCurrentCategory ? 0 : 1);
+            poster.style.zIndex = isActive ? 2 : poster.style.zIndex.value;
+        }
     });
 
+    video.style.visibility = 'hidden';
     paused();
     video.pause();
     video.src = movies[activeIndex].source;
@@ -188,7 +256,7 @@ function manualChange() {
             if (index !== activeIndex) {             
                 stopSlider();
                 activeIndex = index;
-                changeContent(currentCategoryIndex);
+                changeContent(previousCategoryIndex);
                 startSlider();
             }
         });
@@ -196,13 +264,13 @@ function manualChange() {
     forward.addEventListener('click', () => {     
         stopSlider();
         activeIndex = activeIndex < 2 ? activeIndex + 1 : 0;
-        changeContent(currentCategoryIndex);
+        changeContent(previousCategoryIndex);
         startSlider();
     });
     backward.addEventListener('click', () => {      
         stopSlider();
         activeIndex = activeIndex === 0 ? 2 : activeIndex - 1;
-        changeContent(currentCategoryIndex);
+        changeContent(previousCategoryIndex);
         startSlider();
     });
 }
@@ -211,7 +279,7 @@ function manualChange() {
 function startSlider() {
     sliderInterval = setInterval(() => {
         activeIndex = (activeIndex + 1) % 3;
-        changeContent(currentCategoryIndex);
+        changeContent(previousCategoryIndex);
     }, 4000);
 }
 
@@ -226,9 +294,7 @@ playButton.addEventListener('click', () => {
             video.play();
             playing();
             stopSlider();
-            posters.forEach(poster => {
-                poster.style.zIndex = 0;
-            });
+            video.style.visibility = 'visible';
         }
         else {
             video.pause();

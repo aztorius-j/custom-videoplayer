@@ -185,8 +185,7 @@ function changeContent(currentCategoryIndex) {
 function manualChange() {
     sliderButtons.forEach((slide, index) => {
         slide.addEventListener('click', () => {
-            if (index !== activeIndex) {
-                
+            if (index !== activeIndex) {             
                 stopSlider();
                 activeIndex = index;
                 changeContent(currentCategoryIndex);
@@ -194,15 +193,13 @@ function manualChange() {
             }
         });
     });
-    forward.addEventListener('click', () => {
-        
+    forward.addEventListener('click', () => {     
         stopSlider();
         activeIndex = activeIndex < 2 ? activeIndex + 1 : 0;
         changeContent(currentCategoryIndex);
         startSlider();
     });
-    backward.addEventListener('click', () => {
-        
+    backward.addEventListener('click', () => {      
         stopSlider();
         activeIndex = activeIndex === 0 ? 2 : activeIndex - 1;
         changeContent(currentCategoryIndex);

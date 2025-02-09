@@ -169,6 +169,7 @@ function changeContent(currentCategoryIndex) {
         poster.style.zIndex = isActive ? 2 : 1;
     });
 
+    paused();
     video.pause();
     video.src = movies[activeIndex].source;
     video.load();
@@ -185,7 +186,7 @@ function manualChange() {
     sliderButtons.forEach((slide, index) => {
         slide.addEventListener('click', () => {
             if (index !== activeIndex) {
-                paused();
+                
                 stopSlider();
                 activeIndex = index;
                 changeContent(currentCategoryIndex);
@@ -194,14 +195,14 @@ function manualChange() {
         });
     });
     forward.addEventListener('click', () => {
-        paused();
+        
         stopSlider();
         activeIndex = activeIndex < 2 ? activeIndex + 1 : 0;
         changeContent(currentCategoryIndex);
         startSlider();
     });
     backward.addEventListener('click', () => {
-        paused();
+        
         stopSlider();
         activeIndex = activeIndex === 0 ? 2 : activeIndex - 1;
         changeContent(currentCategoryIndex);
@@ -214,7 +215,7 @@ function startSlider() {
     sliderInterval = setInterval(() => {
         activeIndex = (activeIndex + 1) % 3;
         changeContent(currentCategoryIndex);
-    }, 5000);
+    }, 4000);
 }
 
 // STOP SLIDER

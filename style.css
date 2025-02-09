@@ -76,7 +76,7 @@ button {
 
 .category-wrapper .poster-category:nth-child(2),
 .category-wrapper .poster-category:nth-child(3) {
-    transform: translateY(101vh);
+    transform: translateY(calc(var(--vh, 1vh) * 100));
 }
 
 .poster {

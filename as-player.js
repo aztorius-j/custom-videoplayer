@@ -13,7 +13,8 @@ const   video = document.getElementById('video'),
         posters = Array.from(document.querySelectorAll('.poster')),
         sliderButtons = Array.from(document.querySelectorAll('.circle')),
         playIcon = document.querySelector('.play-icon'),
-        pauseIcon = document.querySelector('.pause-icon');
+        pauseIcon = document.querySelector('.pause-icon'),
+        categoryWrappers = Array.from(document.querySelectorAll('.poster-category'));
 
 let     firstMovie, secondMovie, thirdMovie,
         activeIndex = 0,
@@ -124,40 +125,33 @@ manualChange();
 paused();
 soundOn();
 
-const categoryWrappers = Array.from(document.querySelectorAll('.poster-category'));
 // CHANGE CATEGORY
 async function changeCategory(newCategoryIndex) {
     if (newCategoryIndex === previousCategoryIndex) return;
 
     await videoDataPromise;
 
-    console.log('newCategoryIndex:' + newCategoryIndex);
-    console.log('previousCategoryIndex:' + previousCategoryIndex);
-
     const firstWrapper = categoryWrappers[0];
     const secondWrapper = categoryWrappers[1];
     const thirdWrapper = categoryWrappers[2];
 
-    function moveWrapper(wrapper, offsetY) {
+    function moveWrapper(wrapper, offsetPx) {
         if (!wrapper) return; // Ochrana pred chybou, ak wrapper neexistuje
     
         const currentTransform = getComputedStyle(wrapper).transform;
     
-        // Ak už existuje transformácia, získame jej aktuálnu hodnotu
+        // Získame aktuálnu hodnotu translateY
         let currentY = 0;
         if (currentTransform !== 'none') {
             const matrix = new DOMMatrix(currentTransform);
             currentY = matrix.m42; // Y-ová súradnica transformácie
         }
     
-        // Prepočítame offset v pixeloch (napr. 101vh → px)
-        const offsetPx = window.innerHeight * (offsetY / 100);
-    
-        // Nastavíme novú hodnotu transform
+        // Priamy výpočet novej hodnoty (sčítavame alebo odčítavame offsetPx)
         const newY = currentY + offsetPx;
         wrapper.style.transform = `translateY(${newY}px)`;
     
-        return newY; // Vracia novú hodnotu translateY pre prípad, že by si ju chcel použiť
+        return newY; // Vracia novú hodnotu translateY
     }
 
     if (newCategoryIndex === 0) {
@@ -166,26 +160,26 @@ async function changeCategory(newCategoryIndex) {
 
         } else {
             // Pohyb dozadu (2 → 1)
-            moveWrapper(secondWrapper, 100);
-            moveWrapper(firstWrapper, 100);
+            moveWrapper(secondWrapper, video.clientHeight);
+            moveWrapper(firstWrapper, video.clientHeight);
         }
     } 
     else if (newCategoryIndex === 1) {
         if (newCategoryIndex > previousCategoryIndex) {
             // Pohyb dopredu (0 → 1)
-            moveWrapper(firstWrapper, -100);
-            moveWrapper(secondWrapper, -100);
+            moveWrapper(firstWrapper, -video.clientHeight);
+            moveWrapper(secondWrapper, -video.clientHeight);
         } else {
             // Pohyb dozadu (2 → 1)
-            moveWrapper(thirdWrapper, 100);
-            moveWrapper(secondWrapper, 100);
+            moveWrapper(thirdWrapper, video.clientHeight);
+            moveWrapper(secondWrapper, video.clientHeight);
         }
     } 
     else if (newCategoryIndex === 2) {
         if (newCategoryIndex > previousCategoryIndex) {
             // Pohyb dopredu (1 → 2)
-            moveWrapper(secondWrapper, -100);
-            moveWrapper(thirdWrapper, -100);
+            moveWrapper(secondWrapper, -video.clientHeight);
+            moveWrapper(thirdWrapper, -video.clientHeight);
         } else {
             // Pohyb dozadu (2 → 1)
 
@@ -227,13 +221,8 @@ function changeContent(previousCategoryIndex) {
         const isInCurrentCategory = index >= categoryStartIndex && index < categoryStartIndex + 3;
         const isActive = index >= categoryStartIndex && index < categoryStartIndex + 3 && localIndex === activeIndex;
 
-        if (isInCurrentCategory) {
-            poster.style.opacity = isActive ? 1 : 0;
-            poster.style.zIndex = isActive ? 2 : 1;
-        } else {
-            poster.style.opacity = isActive ? 1 : (isInCurrentCategory ? 0 : 1);
-            poster.style.zIndex = isActive ? 2 : poster.style.zIndex.value;
-        }
+        poster.style.opacity = isActive ? 1 : (isInCurrentCategory ? 0 : 1);
+        poster.style.zIndex = isActive ? 2 : (isInCurrentCategory ? 1 : poster.style.zIndex);
     });
 
     video.style.visibility = 'hidden';

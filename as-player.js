@@ -39,8 +39,7 @@ async function fetchMovies() {
 // PROGRESS BAR UPDATE
 document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.querySelector('progress'),
-          stickyElement = document.querySelector('.sticky-element'),
-          previousSection = stickyElement.parentElement.previousElementSibling,
+          previousSection = video.parentElement.parentElement.parentElement.previousElementSibling,
           scrollbars = document.querySelectorAll('.scrollbar');
 
     let progressStartValue = previousSection.offsetTop + previousSection.offsetHeight,

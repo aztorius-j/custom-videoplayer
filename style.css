@@ -75,7 +75,7 @@ button {
     left: 0%;
     opacity: 0;
     transition: opacity 1s ease;
-    will-change: opacity;
+    will-change: transform;
 }
 
 .category-wrapper .poster:nth-child(4),

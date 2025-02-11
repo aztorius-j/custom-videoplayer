@@ -14,7 +14,7 @@ const   video = document.getElementById('video'),
         sliderButtons = Array.from(document.querySelectorAll('.circle')),
         playIcon = document.querySelector('.play-icon'),
         pauseIcon = document.querySelector('.pause-icon'),
-        categoryWrappers = Array.from(document.querySelectorAll('.poster-category'));
+        categoryWrapper = document.querySelector('.category-wrapper');
 
 let     firstMovie, secondMovie, thirdMovie,
         activeIndex = 0,
@@ -130,60 +130,27 @@ async function changeCategory(newCategoryIndex) {
 
     await videoDataPromise;
 
-    const firstWrapper = categoryWrappers[0];
-    const secondWrapper = categoryWrappers[1];
-    const thirdWrapper = categoryWrappers[2];
+    // Získanie aktuálnej transformácie
+    const currentTransform = getComputedStyle(categoryWrapper).transform;
+    let currentY = 0;
 
-    function moveWrapper(wrapper, offsetPx) {
-        if (!wrapper) return; // Ochrana pred chybou, ak wrapper neexistuje
-    
-        const currentTransform = getComputedStyle(wrapper).transform;
-    
-        // Získame aktuálnu hodnotu translateY
-        let currentY = 0;
-        if (currentTransform !== 'none') {
-            const matrix = new DOMMatrix(currentTransform);
-            currentY = matrix.m42; // Y-ová súradnica transformácie
-        }
-    
-        // Priamy výpočet novej hodnoty (sčítavame alebo odčítavame offsetPx)
-        const newY = currentY + offsetPx;
-        wrapper.style.transform = `translateY(${newY}px)`;
-    
-        return newY; // Vracia novú hodnotu translateY
+    if (currentTransform !== 'none') {
+        const matrix = new DOMMatrix(currentTransform);
+        currentY = matrix.m42; // Y-ová súradnica transformácie
     }
 
-    if (newCategoryIndex === 0) {
-        if (newCategoryIndex > previousCategoryIndex) {
-            // Pohyb dopredu (0 → 1)
-
-        } else {
-            // Pohyb dozadu (2 → 1)
-            moveWrapper(secondWrapper, video.clientHeight);
-            moveWrapper(firstWrapper, video.clientHeight);
-        }
-    } 
-    else if (newCategoryIndex === 1) {
-        if (newCategoryIndex > previousCategoryIndex) {
-            // Pohyb dopredu (0 → 1)
-            moveWrapper(firstWrapper, -video.clientHeight);
-            moveWrapper(secondWrapper, -video.clientHeight);
-        } else {
-            // Pohyb dozadu (2 → 1)
-            moveWrapper(thirdWrapper, video.clientHeight);
-            moveWrapper(secondWrapper, video.clientHeight);
-        }
-    } 
-    else if (newCategoryIndex === 2) {
-        if (newCategoryIndex > previousCategoryIndex) {
-            // Pohyb dopredu (1 → 2)
-            moveWrapper(secondWrapper, -video.clientHeight);
-            moveWrapper(thirdWrapper, -video.clientHeight);
-        } else {
-            // Pohyb dozadu (2 → 1)
-
-        }
+    // Výpočet novej hodnoty transformácie
+    let newY;
+    if (previousCategoryIndex === -1) {
+        newY = 0;
+    } else if (newCategoryIndex > previousCategoryIndex) {
+        newY = currentY - window.innerHeight; // Posun nahor
+    } else if (newCategoryIndex < previousCategoryIndex) {
+        newY = currentY + window.innerHeight; // Posun nadol
     }
+
+    // Aplikovanie novej hodnoty
+    categoryWrapper.style.transform = `translateY(${newY}px)`;
 
     previousCategoryIndex = newCategoryIndex;
     video.pause();

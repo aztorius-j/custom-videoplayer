@@ -5,19 +5,19 @@
             {
                 "title": "NEFKUS Creative House",
                 "source": "video/nefkus-creative-house.mp4",
-                "poster": "img/nefkus-thumbnail.png",
+                "poster": "img/nefkus-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=lRWuHWE9k-M"
             },
             {
                 "title": "CHATEAU Ruban",
                 "source": "video/chateau-ruban.mp4",
-                "poster": "img/ruban-thumbnail.png",
+                "poster": "img/ruban-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=CaP-v3poJe8"
             },
             {
                 "title": "NESEDA",
                 "source": "video/neseda.mp4",
-                "poster": "img/neseda-thumbnail.png",
+                "poster": "img/neseda-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=vJd3huvXQeY"
             }
         ]
@@ -29,19 +29,19 @@
             {
                 "title": "CUBE to CUBE",
                 "source": "video/cube-to-cube.mp4",
-                "poster": "img/cube-thumbnail.png",
+                "poster": "img/cube-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=Uq06PzPhILE"
             },
             {
                 "title": "DEECK Frens",
                 "source": "video/deeck-frens.mp4",
-                "poster": "img/deeck-frens-thumbnail.png",
+                "poster": "img/deeck-frens-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=-KYRjsysa18"
             },
             {
                 "title": "LAMITEC",
                 "source": "video/lamitec.mp4",
-                "poster": "img/lamitec-thumbnail.png",
+                "poster": "img/lamitec-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=BPlisiTajAM"
             }
         ]
@@ -53,19 +53,19 @@
             {
                 "title": "TRIPLE Jump",
                 "source": "video/triple-jump.mp4",
-                "poster": "img/triple-jump-thumbnail.png",
+                "poster": "img/triple-jump-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=XdYq01fGyi8"
             },
             {
                 "title": "YCHABODS",
                 "source": "video/ychabods.mp4",
-                "poster": "img/ychabods-thumbnail.png",
+                "poster": "img/ychabods-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=s_TC2IadieI"
             },
             {
                 "title": "STOLEN Street",
                 "source": "video/stolen-street.mp4",
-                "poster": "img/stolen-street-thumbnail.png",
+                "poster": "img/stolen-street-thumbnail.webp",
                 "youtube": "https://www.youtube.com/watch?v=sMguCyPY100"
             }
         ]

@@ -124,37 +124,31 @@ manualChange();
 paused();
 soundOn();
 
+// DEBOUNCE
+function debounce(func, delay) {
+    let debounceTimer;
+    return function (...args) {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
 // CHANGE CATEGORY
 async function changeCategory(newCategoryIndex) {
     if (newCategoryIndex === previousCategoryIndex) return;
 
     await videoDataPromise;
 
-    // Získanie aktuálnej transformácie
-    const currentTransform = getComputedStyle(categoryWrapper).transform;
-    let currentY = 0;
-
-    if (currentTransform !== 'none') {
-        const matrix = new DOMMatrix(currentTransform);
-        currentY = matrix.m42; // Y-ová súradnica transformácie
-    }
+    // Aktualizácia výšky podľa novej veľkosti okna
+    const windowHeight = window.innerHeight;
 
     // Výpočet novej hodnoty transformácie
-    let newY;
-    if (previousCategoryIndex === -1) {
-        newY = 0;
-    } else if (newCategoryIndex > previousCategoryIndex) {
-        newY = currentY - window.innerHeight; // Posun nahor
-    } else if (newCategoryIndex < previousCategoryIndex) {
-        newY = currentY + window.innerHeight; // Posun nadol
-    }
-
-    // Aplikovanie novej hodnoty
+    let newY = -newCategoryIndex * windowHeight;
     categoryWrapper.style.transform = `translateY(${newY}px)`;
 
     previousCategoryIndex = newCategoryIndex;
     video.pause();
-    activeIndex = 0; 
+    activeIndex = 0;
 
     firstMovie = videoData[previousCategoryIndex].videos[0];
     secondMovie = videoData[previousCategoryIndex].videos[1];
@@ -167,6 +161,15 @@ async function changeCategory(newCategoryIndex) {
     changeContent(previousCategoryIndex);
     startSlider();
 }
+
+// ADJUST CATEGORY POSITION
+const adjustCategoryPosition = debounce(() => {
+    if (previousCategoryIndex === -1) return;
+    let newY = -previousCategoryIndex * window.innerHeight;
+    categoryWrapper.style.transform = `translateY(${newY}px)`;
+}, 200);
+
+window.addEventListener("resize", adjustCategoryPosition);
 
 // VISUAL INITIALIZE
 async function visualInitialize() {

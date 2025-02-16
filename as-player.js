@@ -39,16 +39,16 @@ async function fetchMovies() {
 // PROGRESS BAR UPDATE
 document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.querySelector('progress'),
-          previousSection = video.parentElement.parentElement.parentElement.previousElementSibling,
+          previousSection = video.parentElement?.parentElement?.parentElement?.previousElementSibling ?? document.body,
           scrollbars = document.querySelectorAll('.scrollbar');
 
-    let progressStartValue = previousSection.offsetTop + previousSection.offsetHeight,
-        progressMaxValue = window.innerHeight * 5;
+    let progressStartValue = (previousSection === document.body) ? previousSection.offsetTop : previousSection.offsetTop + previousSection.offsetHeight;
+    let progressMaxValue = window.innerHeight * 5;
 
     progressBar.max = progressMaxValue;
 
     const updateOnResize = () => {
-        progressStartValue = previousSection.offsetTop + previousSection.offsetHeight;
+        progressStartValue = (previousSection === document.body) ? previousSection.offsetTop : previousSection.offsetTop + previousSection.offsetHeight;
         progressMaxValue = window.innerHeight * 5;
         progressBar.max = progressMaxValue;
 
